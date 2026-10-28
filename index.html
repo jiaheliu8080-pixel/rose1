@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌹</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fdf0f3;
+    overflow: hidden;
+  }
+  
+  .flower {
+    position: relative;
+    width: 200px;
+    height: 400px;
+  }
+
+  .stem {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 250px;
+    background: linear-gradient(to right, #2e7d32, #4caf50, #2e7d32);
+    border-radius: 6px;
+    z-index: 0;
+  }
+
+  .leaf {
+    position: absolute;
+    width: 60px;
+    height: 35px;
+    background: linear-gradient(to bottom right, #4caf50, #2e7d32);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 0;
+  }
+
+  .leaf-1 {
+    bottom: 130px;
+    left: 50%;
+    transform: translateX(-65px) rotate(-20deg);
+    border-radius: 50% 0 50% 0;
+  }
+
+  .leaf-2 {
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(5px) rotate(20deg);
+    border-radius: 0 50% 0 50%;
+  }
+
+  .head {
+    position: absolute;
+    top: 140px;
+    left: 50%;
+    z-index: 1;
+  }
+
+  .petal {
+    position: absolute;
+    width: 80px;
+    height: 120px;
+    background: radial-gradient(ellipse at top, #ff3366, #b3003b);
+    border-radius: 50% 50% 20% 20%;
+    transform-origin: bottom center;
+    left: -40px;
+    bottom: 0;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease, filter 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .petal-1 { transform: rotate(0deg); }
+  .petal-2 { transform: rotate(60deg); }
+  .petal-3 { transform: rotate(120deg); }
+  .petal-4 { transform: rotate(180deg); }
+  .petal-5 { transform: rotate(240deg); }
+  .petal-6 { transform: rotate(300deg); }
+
+  .petal:hover, .petal:active {
+    filter: brightness(1.15);
+  }
+
+  .center {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, #e91e63, #880e4f);
+    border-radius: 50%;
+    left: -30px;
+    bottom: -30px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 0 15px rgba(0,0,0,0.3);
+  }
+</style>
+</head>
+<body>
+
+<div class="flower">
+  <div class="stem"></div>
+  <div class="leaf leaf-1"></div>
+  <div class="leaf leaf-2"></div>
+  
+  <div class="head">
+    <div class="petal petal-1" onclick="playVoice(1, 0)"></div>
+    <div class="petal petal-2" onclick="playVoice(2, 60)"></div>
+    <div class="petal petal-3" onclick="playVoice(3, 120)"></div>
+    <div class="petal petal-4" onclick="playVoice(4, 180)"></div>
+    <div class="petal petal-5" onclick="playVoice(5, 240)"></div>
+    <div class="petal petal-6" onclick="playVoice(6, 300)"></div>
+    <div class="center"></div>
+  </div>
+</div>
+
+<!-- 预先加载好6个声音文件，突破手机浏览器限制 -->
+<audio id="audio1" src="voice1.m4a" preload="auto"></audio>
+<audio id="audio2" src="voice2.m4a" preload="auto"></audio>
+<audio id="audio3" src="voice3.m4a" preload="auto"></audio>
+<audio id="audio4" src="voice4.m4a" preload="auto"></audio>
+<audio id="audio5" src="voice5.m4a" preload="auto"></audio>
+<audio id="audio6" src="voice6.m4a" preload="auto"></audio>
+
+<script>
+  function playVoice(petalNumber, rotation) {
+    // 1. 先把所有声音都暂停，并把进度条归零
+    for (let i = 1; i <= 6; i++) {
+      let audio = document.getElementById('audio' + i);
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    }
+
+    // 2. 播放当前点击的花瓣对应的声音
+    let currentAudio = document.getElementById('audio' + petalNumber);
+    if (currentAudio) {
+      currentAudio.play().catch((err) => {
+        alert("无法播放声音，请检查录音文件名是否完全是 voice" + petalNumber + ".m4a");
+      });
+    }
+
+    // 3. 点击的动画效果
+    const petal = document.querySelector(`.petal-${petalNumber}`);
+    petal.style.transform = `rotate(${rotation}deg) scale(0.9)`;
+    
+    setTimeout(() => {
+      petal.style.transform = `rotate(${rotation}deg) scale(1)`;
+    }, 200);
+  }
+</script>
+
+</body>
+</html>
